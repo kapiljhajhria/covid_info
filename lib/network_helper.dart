@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 
 void main() async {
   NetworkHelper nHelper=NetworkHelper();
-  nHelper.fetchStateDataList();
+  await nHelper.fetchStateDataList();
   nHelper.printStatesData();
   print(nHelper.statesData.last.indianCases);
 }
