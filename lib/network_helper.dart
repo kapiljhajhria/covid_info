@@ -14,9 +14,20 @@ class NetworkHelper {
   List<State> statesData = [];
 
   printStatesData() => statesData.forEach((state) {
-        print(
+    print(
             "SatetName:${state.name} indainCases:${state.indianCases} foreignCases:${state.foreignCases} cured:${state.cured} deaths:${state.death} ");
-      });
+    int totalIndianCases = statesData.fold(
+        0, (sum, next) => sum + next.indianCases);
+//  int totalIndianCases = statesData.forEach((state)=>totalNotIndianCases+=int.parse(state['totalCasesIndian'])); //working
+    int totalNotIndianCases = statesData.fold(
+        0, (sum, next) => sum + next.foreignCases);
+    int totalCured =
+    statesData.fold(0, (sum, next) => sum + next.cured);
+    int totalDeath =
+    statesData.fold(0, (sum, next) => sum + next.death);
+    print("stats as of ${DateTime.now().toLocal()} total number of cases: ${totalNotIndianCases+totalIndianCases} Indian:$totalIndianCases Foreign:$totalNotIndianCases Total Death so far: $totalDeath and totla cured so far are $totalCured");
+
+  });
 
   Future<Document> getDocument() async {
     Client client = Client();
