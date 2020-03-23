@@ -11,8 +11,9 @@ void main() async {
 
 class NetworkHelper {
   String url = "https://www.mohfw.gov.in/";
-  List<State> statesData = [];
-
+  List<CountryState> statesData = [];
+  bool get hasData=>statesData.isNotEmpty;
+  bool fetchedData=false;
   printStatesData() => statesData.forEach((state) {
     print(
             "SatetName:${state.name} indainCases:${state.indianCases} foreignCases:${state.foreignCases} cured:${state.cured} deaths:${state.death} ");
@@ -38,7 +39,7 @@ class NetworkHelper {
     return documents;
   }
 
-  fetchStateDataList() async {
+  Future<bool> fetchStateDataList() async {
     Document document = await getDocument();
     List<Element> table = document.getElementsByTagName("tbody");
     var rows = table[1].getElementsByTagName("tr");
@@ -47,22 +48,23 @@ class NetworkHelper {
 
     for (int i = 0; i < rows.length - 1; i++) {
       var rowData = rows[i].getElementsByTagName("td");
-      statesData.add(State(
+      statesData.add(CountryState(
           name: rowData[1].text,
           cured: int.parse(rowData[4].text),
           death: int.parse(rowData[5].text),
           foreignCases: int.parse(rowData[3].text),
           indianCases: int.parse(rowData[2].text)));
     }
+    return statesData.isNotEmpty;
   }
 }
 
-class State {
+class CountryState {
   String name;
   int indianCases;
   int foreignCases;
   int cured;
   int death;
-  State(
+  CountryState(
       {this.cured, this.death, this.foreignCases, this.indianCases, this.name});
 }
