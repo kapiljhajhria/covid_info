@@ -16,11 +16,17 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
-    nh.fetchStateDataList().whenComplete(() {
-      setState(() {
-        fetchedData = true;
-      });
+    nh.getListOfAllData().then((value){
+      nh.convertMapListToObject(value);
+        setState(() {
+      fetchedData = true;
     });
+    });
+//    nh.getListOfAllData().whenComplete(() {
+//      setState(() {
+//        fetchedData = true;
+//      });
+//    });
 
     super.initState();
   }
@@ -35,30 +41,38 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.refresh),
             onPressed: () {
               fetchedData = false;
-              nh.fetchStateDataList().whenComplete(() {
-                fetchedData = true;
+              setState(() {
+
+              });
+              nh.getListOfAllData().then((value){
+                nh.convertMapListToObject(value);
+                setState(() {
+                  fetchedData = true;
+                });
               });
             },
           )
         ],
       ),
       body: fetchedData?ListView.builder(
-          itemCount: nh.statesData.length,
+          itemCount: nh.allObjectsList.length,
           itemBuilder: (BuildContext context, int index) {
-            CountryState cState = nh.statesData[index];
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-//              textBaseline: TextBaseline.alphabetic,
-//              textDirection: TextDirection.ltr,
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                    child: Text(cState.name)),
-                Expanded(child: Text(cState.indianCases.toString())),
-                Expanded(child: Text(cState.foreignCases.toString())),
-                Expanded(child: Text(cState.cured.toString())),
-                Expanded(child: Text(cState.death.toString())),
-              ],
+            IndiaCovidData data = nh.allObjectsList[index];
+            return Container(
+              width: double.infinity,
+              height: 180,
+              child: Column(
+                children: <Widget>[
+                  Text("Total Cases :"+data.cases.toString()),
+                  Text("Cases Today :"+data.todayCases.toString()),
+                  Text("Total Deaths :"+data.deaths.toString()),
+                  Text("Deaths Today :"+data.todayDeaths.toString()),
+                  Text("Recovered :"+data.recovered.toString()),
+                  Text("Active Cases :"+data.active.toString()),
+                  Text("Critical :"+data.critical.toString()),
+                  Text("TimeStamp :"+data.timestamp),
+                ],
+              ),
             );
           }):Center(child: CircularProgressIndicator(),),
     );

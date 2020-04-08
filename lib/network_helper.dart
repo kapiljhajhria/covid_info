@@ -1,70 +1,71 @@
-import 'package:html/parser.dart';
-import 'package:html/dom.dart';
+import 'dart:convert';
 import 'package:http/http.dart';
 
 void main() async {
-  NetworkHelper nHelper=NetworkHelper();
-  await nHelper.fetchStateDataList();
-  nHelper.printStatesData();
-  print(nHelper.statesData.last.indianCases);
+  NetworkHelper nHelper = NetworkHelper();
+
+  nHelper.convertMapListToObject(await nHelper.getListOfAllData());
+  print(nHelper.allObjectsList.last.cases);
+  print(nHelper.allObjectsList.last.todayCases);
+  print(nHelper.allObjectsList.last.deaths);
+  print(nHelper.allObjectsList.last.todayDeaths);
+  print(nHelper.allObjectsList.last.recovered);
+  print(nHelper.allObjectsList.last.active);
+  print(nHelper.allObjectsList.last.critical);
+  print(nHelper.allObjectsList.last.timestamp);
 }
 
 class NetworkHelper {
-  String url = "https://www.mohfw.gov.in/";
-  List<CountryState> statesData = [];
-  bool get hasData=>statesData.isNotEmpty;
-  bool fetchedData=false;
-  printStatesData() => statesData.forEach((state) {
-    print(
-            "SatetName:${state.name} indainCases:${state.indianCases} foreignCases:${state.foreignCases} cured:${state.cured} deaths:${state.death} ");
-    int totalIndianCases = statesData.fold(
-        0, (sum, next) => sum + next.indianCases);
-//  int totalIndianCases = statesData.forEach((state)=>totalNotIndianCases+=int.parse(state['totalCasesIndian'])); //working
-    int totalNotIndianCases = statesData.fold(
-        0, (sum, next) => sum + next.foreignCases);
-    int totalCured =
-    statesData.fold(0, (sum, next) => sum + next.cured);
-    int totalDeath =
-    statesData.fold(0, (sum, next) => sum + next.death);
-    print("stats as of ${DateTime.now().toLocal()} total number of cases: ${totalNotIndianCases+totalIndianCases} Indian:$totalIndianCases Foreign:$totalNotIndianCases Total Death so far: $totalDeath and totla cured so far are $totalCured");
+  String url = "http://covid19.soficoop.com/country/in";
+  List<IndiaCovidData> allObjectsList = [];
 
-  });
-
-  Future<Document> getDocument() async {
+  Future<List> getListOfAllData() async {
     Client client = Client();
     Response response = await client.get(url);
 
-    Document documents = parse(response.body);
-
-    return documents;
+    Map jsonMap = json.decode(response.body);
+    print(jsonMap['snapshots'].last);
+    return jsonMap['snapshots'];
   }
 
-  Future<bool> fetchStateDataList() async {
-    Document document = await getDocument();
-    List<Element> table = document.getElementsByTagName("tbody");
-    var rows = table[1].getElementsByTagName("tr");
-    print(
-        "total number of rows are ${rows.length} that mneans total states are ${rows.length - 1}");
+  convertMapListToObject(List mapsList) {
+    List<IndiaCovidData> res = [];
+    mapsList.forEach((element) {
+      DateTime localTime = DateTime.parse(element['timestamp'])
+          .toLocal();
+      String localTimeInHumanFormat=localTime.day.toString()+'/'+localTime.month.toString()+'/'+localTime.year.toString()+' '+localTime.hour.toString()+':'+localTime.minute.toString() ;
 
-    for (int i = 0; i < rows.length - 1; i++) {
-      var rowData = rows[i].getElementsByTagName("td");
-      statesData.add(CountryState(
-          name: rowData[1].text,
-          cured: int.parse(rowData[4].text),
-          death: int.parse(rowData[5].text),
-          foreignCases: int.parse(rowData[3].text),
-          indianCases: int.parse(rowData[2].text)));
-    }
-    return statesData.isNotEmpty;
+      res.add(IndiaCovidData(
+          active: element['active'],
+          cases: element['cases'],
+          critical: element['critical'],
+          deaths: element['deaths'],
+          recovered: element['recovered'],
+          todayCases: element['todayCases'],
+          todayDeaths: element['todayDeaths'],
+          timestamp: localTimeInHumanFormat));
+    });
+    this.allObjectsList = List.from(res.reversed);
   }
 }
 
-class CountryState {
-  String name;
-  int indianCases;
-  int foreignCases;
-  int cured;
-  int death;
-  CountryState(
-      {this.cured, this.death, this.foreignCases, this.indianCases, this.name});
+class IndiaCovidData {
+  int cases;
+  int todayCases;
+  int deaths;
+  int todayDeaths;
+  int recovered;
+  int active;
+  int critical;
+  String timestamp;
+
+  IndiaCovidData(
+      {this.todayCases,
+      this.critical,
+      this.todayDeaths,
+      this.timestamp,
+      this.active,
+      this.cases,
+      this.deaths,
+      this.recovered});
 }
