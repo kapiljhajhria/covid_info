@@ -12,7 +12,7 @@ void main() async {
   print(nHelper.allObjectsList.last.recovered);
   print(nHelper.allObjectsList.last.active);
   print(nHelper.allObjectsList.last.critical);
-  print(nHelper.allObjectsList.last.timestamp);
+  print(nHelper.allObjectsList.last.day);
 }
 
 class NetworkHelper {
@@ -30,10 +30,15 @@ class NetworkHelper {
 
   convertMapListToObject(List mapsList) {
     List<IndiaCovidData> res = [];
-    mapsList.forEach((element) {
-      DateTime localTime = DateTime.parse(element['timestamp'])
-          .toLocal();
-      String localTimeInHumanFormat=localTime.day.toString()+'/'+localTime.month.toString()+'/'+localTime.year.toString()+' '+localTime.hour.toString()+':'+localTime.minute.toString() ;
+
+    for(int i=0;i<mapsList.length;i++){
+      Map element=mapsList[i];
+      DateTime localTime = DateTime.parse(element['timestamp']).toLocal();
+      String statsForDay = localTime.day.toString() +
+          '/' +
+          localTime.month.toString() +
+          '/' +
+          localTime.year.toString();
 
       res.add(IndiaCovidData(
           active: element['active'],
@@ -43,8 +48,9 @@ class NetworkHelper {
           recovered: element['recovered'],
           todayCases: element['todayCases'],
           todayDeaths: element['todayDeaths'],
-          timestamp: localTimeInHumanFormat));
-    });
+          day: statsForDay));
+
+    }
     this.allObjectsList = List.from(res.reversed);
   }
 }
@@ -57,13 +63,13 @@ class IndiaCovidData {
   int recovered;
   int active;
   int critical;
-  String timestamp;
+  String day;
 
   IndiaCovidData(
       {this.todayCases,
       this.critical,
       this.todayDeaths,
-      this.timestamp,
+      this.day,
       this.active,
       this.cases,
       this.deaths,
