@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'network_helper.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CountryData extends StatefulWidget {
   @override
@@ -14,7 +13,6 @@ class _CountryDataState extends State<CountryData> {
 
   @override
   void initState() {
-//    Hive.openBox('covidData');
     var result = Hive.box('covidData').get('test01');
     print('Test Result: $result');
     nh.getListOfAllData().then((value) {
@@ -76,17 +74,199 @@ class _CountryDataState extends State<CountryData> {
                         padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
                         child: Column(
                           children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.only(bottom: 20),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
 
-                            cardsRow("Total Cases :", data.cases.toString()),
-                            cardsRow(
-                                "Cases Today :", data.todayCases.toString()),
-                            cardsRow("Total Deaths :", data.deaths.toString()),
-                            cardsRow(
-                                "Deaths Today :", data.todayDeaths.toString()),
-                            cardsRow("Recovered :", data.recovered.toString()),
-                            cardsRow("Active Cases :", data.active.toString()),
-                            cardsRow("Critical :", data.critical.toString()),
-                            cardsRow("TimeStamp :", data.day),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          margin: EdgeInsets.only(bottom: 15),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Image.asset(
+                                                      "assets/icons/total-infected.png",
+                                                      height: 45,
+                                                      width: 45,
+                                                    ),
+                                                    Text('Infected',style: TextStyle(color: Colors.black45),)
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        data.cases.toString(),
+                                                        style: TextStyle(
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold,),
+                                                      )))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Image.asset(
+                                                      "assets/icons/recovered.png",
+                                                      height: 40,
+                                                      width: 40,
+                                                    ),
+                                                    Text('cured',style: TextStyle(color: Colors.black45),)
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                        data.recovered.toString(),
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                        ),
+                                                      )))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Image.asset(
+                                                      "assets/icons/deaths.png",
+                                                      height: 40,
+                                                      width: 40,
+                                                    ),
+                                                    Text('deaths',style: TextStyle(color: Colors.black45),)
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                      alignment:
+                                                      Alignment.center,
+                                                      child: Text(
+                                                        data.deaths.toString(),
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                        ),
+                                                      )))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 15),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Image.asset(
+                                                  "assets/icons/infected2.png",
+                                                  height: 40,
+                                                  width: 40,
+                                                ),
+                                                Text('Infected',style: TextStyle(color: Colors.black45),)
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                              child: Container(
+                                                  alignment:
+                                                  Alignment.center,
+                                                  child: Text(
+                                                    data.todayCases.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                    ),
+                                                  )))
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Image.asset(
+                                                  "assets/icons/deaths.png",
+                                                  height: 40,
+                                                  width: 40,
+                                                ),
+                                                Text('deaths',style: TextStyle(color: Colors.black45),)
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                              child: Container(
+                                                  alignment:
+                                                  Alignment.center,
+                                                  child: Text(
+                                                    data.todayDeaths.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                    ),
+                                                  )))
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

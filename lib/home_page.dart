@@ -1,7 +1,10 @@
 import 'package:covidinfo/country_data_tab.dart';
+import 'package:covidinfo/network_helper.dart';
 import 'package:covidinfo/state-data.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,6 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  NetworkHelper nh= NetworkHelper();
   int _tabIndex = 0;
   List<Widget> _navigationTabsList = [CountryData(), StatesData(), StatesData()];
   var box;
@@ -17,12 +21,56 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     box = Hive.box('covidData');
     box.put('test01', 'this is hive test8');
+    checkFOrUpdates(context);
     super.initState();
   }
   Future<void> openHiveBox()async{
     final storageBox = await Hive.openBox('covidData');
     box = Hive.box('covidData');
   }
+
+  checkFOrUpdates(BuildContext context) async {
+    bool updateAvailable=await nh.checkForUpdates();
+    if(updateAvailable){
+      Flushbar(
+        flushbarPosition: FlushbarPosition.BOTTOM,
+        flushbarStyle: FlushbarStyle.FLOATING,
+        reverseAnimationCurve: Curves.decelerate,
+        forwardAnimationCurve: Curves.elasticOut,
+        backgroundColor: Colors.red,
+        boxShadows: [BoxShadow(color: Colors.blue[800], offset: Offset(0.0, 2.0), blurRadius: 3.0)],
+        backgroundGradient: LinearGradient(colors: [Colors.blueGrey, Colors.black]),
+        isDismissible: false,
+        duration: Duration(seconds: 4),
+        icon: Icon(
+          Icons.update,
+          color: Colors.greenAccent,
+        ),
+        mainButton: FlatButton(
+          onPressed: () {
+            launch(nh.updateFolderUrl);
+          },
+          child: Text(
+            "Download",
+            style: TextStyle(color: Colors.amber),
+          ),
+        ),
+        showProgressIndicator: true,
+        progressIndicatorBackgroundColor: Colors.blueGrey,
+        titleText: Text(
+          "Update Available",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.yellow[600], fontFamily: "ShadowsIntoLightTwo"),
+        ),
+        messageText: Text(
+          "Verison ${nh.versionAvailable} is Available with more features or changes, Kindly download latest version of app to stay updated",
+          style: TextStyle(fontSize: 18.0, color: Colors.green, fontFamily: "ShadowsIntoLightTwo"),
+        ),
+      )..show(context);
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

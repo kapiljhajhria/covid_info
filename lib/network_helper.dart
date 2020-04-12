@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:package_info/package_info.dart';
 
 void main() async {
   NetworkHelper nHelper = NetworkHelper();
@@ -17,7 +18,12 @@ void main() async {
 
 class NetworkHelper {
   String url = "http://covid19.soficoop.com/country/in";
+  String updateUrl =
+      "https://raw.githubusercontent.com/kapiljhajhria/covid_info/master/lib/updates-info.json";
+  String updateFolderUrl =
+      "https://drive.google.com/open?id=12TeFhUPxpIl1UR81ZbS8IW2MOs-CU2Im";
   List<IndiaCovidData> allObjectsList = [];
+  String versionAvailable;
 
   Future<List> getListOfAllData() async {
     Client client = Client();
@@ -26,6 +32,23 @@ class NetworkHelper {
     Map jsonMap = json.decode(response.body);
     print(jsonMap['snapshots'].last);
     return jsonMap['snapshots'];
+  }
+
+  Future<bool> checkForUpdates() async {
+    Client client = Client();
+    Response response = await client.get(updateUrl);
+    Map jsonMap = json.decode(response.body);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    List versionList = packageInfo.version.split(".");
+    String version =versionList[0]+"."+versionList[1]+versionList[2];
+    String buildNumber = packageInfo.buildNumber;
+    ///TODO: do the same for latest version as well
+    double latestVersion=jsonMap['version'];
+    versionAvailable=latestVersion.toString();
+    print('appName:$appName , packageName:$packageName , version:$version , latestVersion:$latestVersion buildNumber:$buildNumber');
+    return jsonMap['version']>double.parse(version);
   }
 
   convertMapListToObject(List mapsList) {
@@ -52,7 +75,8 @@ class NetworkHelper {
             localTime: localTime));
       } else if (DateTime.parse(mapsList[i]['timestamp']).toLocal().day !=
           DateTime.parse(mapsList[i + 1]['timestamp']).toLocal().day) {
-        print("adding data for day;${DateTime.parse(mapsList[i]['timestamp']).toLocal().day}");
+        print(
+            "adding data for day;${DateTime.parse(mapsList[i]['timestamp']).toLocal().day}");
         res.add(IndiaCovidData(
             active: element['active'],
             cases: element['cases'],
