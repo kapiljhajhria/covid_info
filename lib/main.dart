@@ -11,8 +11,7 @@ void main()async{
   final appDocDir = await getApplicationDocumentsDirectory();
   String appDocPath = appDocDir.path;
   Hive.init(appDocPath);
-  final covidBox = await Hive.openBox('covidData');
-  var box = Hive.box('covidData');
+  await Hive.openBox('covidData');
   runApp(MyApp());
 }
 

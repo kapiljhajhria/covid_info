@@ -31,26 +31,42 @@ class NetworkHelper {
   convertMapListToObject(List mapsList) {
     List<IndiaCovidData> res = [];
 
-    for(int i=0;i<mapsList.length;i++){
-      Map element=mapsList[i];
+    for (int i = 0; i < mapsList.length; i++) {
+      Map element = mapsList[i];
       DateTime localTime = DateTime.parse(element['timestamp']).toLocal();
       String statsForDay = localTime.day.toString() +
           '/' +
           localTime.month.toString() +
           '/' +
           localTime.year.toString();
-
-      res.add(IndiaCovidData(
-          active: element['active'],
-          cases: element['cases'],
-          critical: element['critical'],
-          deaths: element['deaths'],
-          recovered: element['recovered'],
-          todayCases: element['todayCases'],
-          todayDeaths: element['todayDeaths'],
-          day: statsForDay));
-
+      if (i == mapsList.length - 1) {
+        res.add(IndiaCovidData(
+            active: element['active'],
+            cases: element['cases'],
+            critical: element['critical'],
+            deaths: element['deaths'],
+            recovered: element['recovered'],
+            todayCases: element['todayCases'],
+            todayDeaths: element['todayDeaths'],
+            day: statsForDay,
+            localTime: localTime));
+      } else if (DateTime.parse(mapsList[i]['timestamp']).toLocal().day !=
+          DateTime.parse(mapsList[i + 1]['timestamp']).toLocal().day) {
+        print("adding data for day;${DateTime.parse(mapsList[i]['timestamp']).toLocal().day}");
+        res.add(IndiaCovidData(
+            active: element['active'],
+            cases: element['cases'],
+            critical: element['critical'],
+            deaths: element['deaths'],
+            recovered: element['recovered'],
+            todayCases: element['todayCases'],
+            todayDeaths: element['todayDeaths'],
+            day: statsForDay,
+            localTime: localTime));
+      }
     }
+    //only include one item per day
+
     this.allObjectsList = List.from(res.reversed);
   }
 }
@@ -64,6 +80,7 @@ class IndiaCovidData {
   int active;
   int critical;
   String day;
+  DateTime localTime;
 
   IndiaCovidData(
       {this.todayCases,
@@ -73,5 +90,6 @@ class IndiaCovidData {
       this.active,
       this.cases,
       this.deaths,
-      this.recovered});
+      this.recovered,
+      this.localTime});
 }

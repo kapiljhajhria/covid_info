@@ -15,10 +15,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    openHiveBox().whenComplete((){
-      box.put('test01', 'this is hive test');
-    });
-
+    box = Hive.box('covidData');
+    box.put('test01', 'this is hive test8');
     super.initState();
   }
   Future<void> openHiveBox()async{
