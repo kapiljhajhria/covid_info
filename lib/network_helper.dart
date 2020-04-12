@@ -35,6 +35,7 @@ class NetworkHelper {
   }
 
   Future<bool> checkForUpdates() async {
+    versionAvailable="";
     Client client = Client();
     Response response = await client.get(updateUrl);
     Map jsonMap = json.decode(response.body);

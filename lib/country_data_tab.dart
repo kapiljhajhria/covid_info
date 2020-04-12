@@ -3,24 +3,22 @@ import 'package:hive/hive.dart';
 import 'network_helper.dart';
 
 class CountryData extends StatefulWidget {
+  List<IndiaCovidData> indiaDataList;
+
+  CountryData({Key key, this.indiaDataList}) : super(key: key);
   @override
   _CountryDataState createState() => _CountryDataState();
 }
 
 class _CountryDataState extends State<CountryData> {
-  NetworkHelper nh = NetworkHelper();
-  bool fetchedData = false;
+  List<IndiaCovidData> allObjectsList =[];
 
   @override
   void initState() {
+    allObjectsList =widget.indiaDataList;
     var result = Hive.box('covidData').get('test01');
     print('Test Result: $result');
-    nh.getListOfAllData().then((value) {
-      nh.convertMapListToObject(value);
-      setState(() {
-        fetchedData = true;
-      });
-    });
+
     super.initState();
   }
 
@@ -48,8 +46,7 @@ class _CountryDataState extends State<CountryData> {
 
   @override
   Widget build(BuildContext context) {
-    return fetchedData
-        ? RefreshIndicator(
+    return RefreshIndicator(
             onRefresh: () async {
               print('Data refreshed');
               await Future.delayed(Duration(seconds: 5));
@@ -57,9 +54,9 @@ class _CountryDataState extends State<CountryData> {
             },
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: nh.allObjectsList.length,
+                itemCount: allObjectsList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  IndiaCovidData data = nh.allObjectsList[index];
+                  IndiaCovidData data = allObjectsList[index];
                   return Container(
                     margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
                     child: Card(
@@ -273,9 +270,7 @@ class _CountryDataState extends State<CountryData> {
                     ),
                   );
                 }),
-          )
-        : Center(
-            child: CircularProgressIndicator(),
           );
+
   }
 }
