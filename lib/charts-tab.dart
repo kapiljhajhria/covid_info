@@ -15,114 +15,93 @@ class ChartsTab extends StatefulWidget {
 
 class _ChartsTabState extends State<ChartsTab> {
   List<IndiaCovidData> indiaDataList;
-  List<charts.Series<Pollution, String>> _seriesData;
-  List<charts.Series<Task, String>> _seriesPieData;
-  List<charts.Series<Sales, int>> _seriesLineData;
+  List<charts.Series<BarChartClass, String>> _seriesData;
+  List<charts.Series<PieChartClass, String>> _seriesPieData;
+  List<charts.Series<TotalStatsClass, int>> _seriesLineData;
 
   _generateData() {
     int totalDays = widget.indiaDataList.length;
     var data1 = [
-      new Pollution(
+      new BarChartClass(
           "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
           widget.indiaDataList[totalDays - 3].todayCases),
-      new Pollution(
+      new BarChartClass(
           "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
           widget.indiaDataList[totalDays - 2].todayCases),
-      new Pollution(
+      new BarChartClass(
           "${widget.indiaDataList[totalDays - 1].localTime.day}/${widget.indiaDataList[totalDays - 1].localTime.month}",
           widget.indiaDataList[totalDays - 1].todayCases),
     ];
     var data2 = [
-      new Pollution(
+      new BarChartClass(
           "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
           widget.indiaDataList[totalDays - 3].todayDeaths),
-      new Pollution(
+      new BarChartClass(
           "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
           widget.indiaDataList[totalDays - 2].todayDeaths),
-      new Pollution(
+      new BarChartClass(
           "${widget.indiaDataList[totalDays - 1].localTime.day}/${widget.indiaDataList[totalDays - 1].localTime.month}",
           widget.indiaDataList[totalDays - 1].todayDeaths),
     ];
-    var data3 = [
-      new Pollution(
-          "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
-          0),
-      new Pollution(
-          "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
-          0),
-      new Pollution(
-          "${widget.indiaDataList[totalDays - 1].localTime.day}/${widget.indiaDataList[totalDays - 1].localTime.month}",
-          0),
-    ];
+
     double totalCases = (widget.indiaDataList.last.cases).toDouble();
     var piedata = [
-      new Task('Total cases:${widget.indiaDataList.last.cases}',
+      new PieChartClass('Total cases:${widget.indiaDataList.last.cases}',
           widget.indiaDataList.last.cases.toDouble(), Color(0xff3366cc)),
-      new Task('Deaths:${widget.indiaDataList.last.deaths}',
+      new PieChartClass('Deaths:${widget.indiaDataList.last.deaths}',
           widget.indiaDataList.last.deaths.toDouble(), Color(0xff990099)),
-      new Task('Recovered:${widget.indiaDataList.last.recovered}',
+      new PieChartClass('Recovered:${widget.indiaDataList.last.recovered}',
           widget.indiaDataList.last.recovered.toDouble(), Color(0xff109618)),
     ];
 
     var linesalesdata2 = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
       IndiaCovidData val = entry.value;
-      return Sales(idx, val.cases);
+      return TotalStatsClass(idx, val.cases);
     }).toList();
     var linesalesdata = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
       IndiaCovidData val = entry.value;
-      return Sales(idx, val.deaths);
+      return TotalStatsClass(idx, val.deaths);
     }).toList();
 
     var linesalesdata1 = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
       IndiaCovidData val = entry.value;
-      return Sales(idx, val.recovered);
+      return TotalStatsClass(idx, val.recovered);
     }).toList();
 
     _seriesData.add(
       charts.Series(
-        domainFn: (Pollution pollution, _) => pollution.place,
-        measureFn: (Pollution pollution, _) => pollution.quantity,
+        domainFn: (BarChartClass pollution, _) => pollution.dateMonth,
+        measureFn: (BarChartClass pollution, _) => pollution.numberOfPeopel,
         id: '2017',
         data: data1,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
+        fillColorFn: (BarChartClass pollution, _) =>
             charts.ColorUtil.fromDartColor(Color(0xff990099)),
       ),
     );
 
     _seriesData.add(
       charts.Series(
-        domainFn: (Pollution pollution, _) => pollution.place,
-        measureFn: (Pollution pollution, _) => pollution.quantity,
+        domainFn: (BarChartClass pollution, _) => pollution.dateMonth,
+        measureFn: (BarChartClass pollution, _) => pollution.numberOfPeopel,
         data: data2,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
+        fillColorFn: (BarChartClass pollution, _) =>
             charts.ColorUtil.fromDartColor(Color(0xff109618)),
-      ),
-    );
-
-    _seriesData.add(
-      charts.Series(
-        domainFn: (Pollution pollution, _) => pollution.place,
-        measureFn: (Pollution pollution, _) => pollution.quantity,
-        data: data3,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
-            charts.ColorUtil.fromDartColor(Color(0xffff9900)),
       ),
     );
 
     _seriesPieData.add(
       charts.Series(
-        domainFn: (Task task, _) => task.task,
-        measureFn: (Task task, _) => task.taskvalue,
-        colorFn: (Task task, _) =>
-            charts.ColorUtil.fromDartColor(task.colorval),
+        domainFn: (PieChartClass task, _) => task.label,
+        measureFn: (PieChartClass task, _) => task.labelValue,
+        colorFn: (PieChartClass task, _) =>
+            charts.ColorUtil.fromDartColor(task.colorValue),
         data: piedata,
-        labelAccessorFn: (Task row, _) => '${row.taskvalue}',
+        labelAccessorFn: (PieChartClass row, _) => '${row.labelValue}',
       ),
     );
 
@@ -130,24 +109,24 @@ class _ChartsTabState extends State<ChartsTab> {
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
         data: linesalesdata,
-        domainFn: (Sales sales, _) => sales.yearval,
-        measureFn: (Sales sales, _) => sales.salesval,
+        domainFn: (TotalStatsClass sales, _) => sales.nDay,
+        measureFn: (TotalStatsClass sales, _) => sales.noOfPeople,
       ),
     );
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
         data: linesalesdata1,
-        domainFn: (Sales sales, _) => sales.yearval,
-        measureFn: (Sales sales, _) => sales.salesval,
+        domainFn: (TotalStatsClass sales, _) => sales.nDay,
+        measureFn: (TotalStatsClass sales, _) => sales.noOfPeople,
       ),
     );
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),
         data: linesalesdata2,
-        domainFn: (Sales sales, _) => sales.yearval,
-        measureFn: (Sales sales, _) => sales.salesval,
+        domainFn: (TotalStatsClass sales, _) => sales.nDay,
+        measureFn: (TotalStatsClass sales, _) => sales.noOfPeople,
       ),
     );
   }
@@ -158,9 +137,9 @@ class _ChartsTabState extends State<ChartsTab> {
   void initState() {
     indiaDataList = widget.indiaDataList;
     super.initState();
-    _seriesData = List<charts.Series<Pollution, String>>();
-    _seriesPieData = List<charts.Series<Task, String>>();
-    _seriesLineData = List<charts.Series<Sales, int>>();
+    _seriesData = List<charts.Series<BarChartClass, String>>();
+    _seriesPieData = List<charts.Series<PieChartClass, String>>();
+    _seriesLineData = List<charts.Series<TotalStatsClass, int>>();
     _generateData();
     chartsWidgetList = [
       Padding(
@@ -281,23 +260,24 @@ class _ChartsTabState extends State<ChartsTab> {
   }
 }
 
-class Pollution {
-  String place;
-  int quantity;
-  Pollution(this.place, this.quantity);
+class BarChartClass {
+  String dateMonth;
+  int numberOfPeopel;
+
+  BarChartClass(this.dateMonth, this.numberOfPeopel);
 }
 
-class Task {
-  String task;
-  double taskvalue;
-  Color colorval;
+class PieChartClass {
+  String label;
+  double labelValue;
+  Color colorValue;
 
-  Task(this.task, this.taskvalue, this.colorval);
+  PieChartClass(this.label, this.labelValue, this.colorValue);
 }
 
-class Sales {
-  int yearval;
-  int salesval;
+class TotalStatsClass {
+  int nDay;
+  int noOfPeople;
 
-  Sales(this.yearval, this.salesval);
+  TotalStatsClass(this.nDay, this.noOfPeople);
 }
