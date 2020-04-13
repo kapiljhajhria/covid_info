@@ -20,25 +20,39 @@ class _ChartsTabState extends State<ChartsTab> {
   List<charts.Series<Sales, int>> _seriesLineData;
 
   _generateData() {
-    int totaldays = widget.indiaDataList.length;
+    int totalDays = widget.indiaDataList.length;
     var data1 = [
       new Pollution(
-          'day b4 yesterday', widget.indiaDataList[totaldays - 3].todayCases),
+          "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
+          widget.indiaDataList[totalDays - 3].todayCases),
       new Pollution(
-          'yesterday', widget.indiaDataList[totaldays - 2].todayCases),
-      new Pollution('Today', widget.indiaDataList[totaldays - 1].todayCases),
+          "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
+          widget.indiaDataList[totalDays - 2].todayCases),
+      new Pollution(
+          "${widget.indiaDataList[totalDays - 1].localTime.day}/${widget.indiaDataList[totalDays - 1].localTime.month}",
+          widget.indiaDataList[totalDays - 1].todayCases),
     ];
     var data2 = [
       new Pollution(
-          'day b4 yesterday', widget.indiaDataList[totaldays - 3].todayDeaths),
+          "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
+          widget.indiaDataList[totalDays - 3].todayDeaths),
       new Pollution(
-          'yesterday', widget.indiaDataList[totaldays - 2].todayDeaths),
-      new Pollution('Today', widget.indiaDataList[totaldays - 1].todayDeaths),
+          "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
+          widget.indiaDataList[totalDays - 2].todayDeaths),
+      new Pollution(
+          "${widget.indiaDataList[totalDays - 1].localTime.day}/${widget.indiaDataList[totalDays - 1].localTime.month}",
+          widget.indiaDataList[totalDays - 1].todayDeaths),
     ];
     var data3 = [
-      new Pollution('day b4 yesterday', 0),
-      new Pollution('yesterday', 0),
-      new Pollution('Today', 0),
+      new Pollution(
+          "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
+          0),
+      new Pollution(
+          "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
+          0),
+      new Pollution(
+          "${widget.indiaDataList[totalDays - 1].localTime.day}/${widget.indiaDataList[totalDays - 1].localTime.month}",
+          0),
     ];
     double totalCases = (widget.indiaDataList.last.cases).toDouble();
     var piedata = [
@@ -83,7 +97,6 @@ class _ChartsTabState extends State<ChartsTab> {
       charts.Series(
         domainFn: (Pollution pollution, _) => pollution.place,
         measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '2018',
         data: data2,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (Pollution pollution, _) =>
@@ -95,7 +108,6 @@ class _ChartsTabState extends State<ChartsTab> {
       charts.Series(
         domainFn: (Pollution pollution, _) => pollution.place,
         measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '2019',
         data: data3,
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (Pollution pollution, _) =>
@@ -105,12 +117,10 @@ class _ChartsTabState extends State<ChartsTab> {
 
     _seriesPieData.add(
       charts.Series(
-        displayName: "Display Name",
         domainFn: (Task task, _) => task.task,
         measureFn: (Task task, _) => task.taskvalue,
         colorFn: (Task task, _) =>
             charts.ColorUtil.fromDartColor(task.colorval),
-        id: 'Total Data Pie Chart',
         data: piedata,
         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
       ),
@@ -119,7 +129,6 @@ class _ChartsTabState extends State<ChartsTab> {
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
-        id: 'Air Pollution',
         data: linesalesdata,
         domainFn: (Sales sales, _) => sales.yearval,
         measureFn: (Sales sales, _) => sales.salesval,
@@ -128,7 +137,6 @@ class _ChartsTabState extends State<ChartsTab> {
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
-        id: 'Air Pollution',
         data: linesalesdata1,
         domainFn: (Sales sales, _) => sales.yearval,
         measureFn: (Sales sales, _) => sales.salesval,
@@ -137,7 +145,6 @@ class _ChartsTabState extends State<ChartsTab> {
     _seriesLineData.add(
       charts.Series(
         colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),
-        id: 'Air Pollution',
         data: linesalesdata2,
         domainFn: (Sales sales, _) => sales.yearval,
         measureFn: (Sales sales, _) => sales.salesval,
@@ -150,7 +157,6 @@ class _ChartsTabState extends State<ChartsTab> {
   @override
   void initState() {
     indiaDataList = widget.indiaDataList;
-    // TODO: implement initState
     super.initState();
     _seriesData = List<charts.Series<Pollution, String>>();
     _seriesPieData = List<charts.Series<Task, String>>();
@@ -164,7 +170,7 @@ class _ChartsTabState extends State<ChartsTab> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Countrys Stats',
+                  'Country\'s Stats',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
                 Expanded(
@@ -174,11 +180,11 @@ class _ChartsTabState extends State<ChartsTab> {
                       animate: true,
                       animationDuration: Duration(seconds: 2),
                       behaviors: [
-                        new charts.ChartTitle('days from 1st case',
+                        new charts.ChartTitle('no. of days',
                             behaviorPosition: charts.BehaviorPosition.bottom,
                             titleOutsideJustification:
                                 charts.OutsideJustification.middleDrawArea),
-                        new charts.ChartTitle('people (in thousands)',
+                        new charts.ChartTitle('people',
                             behaviorPosition: charts.BehaviorPosition.start,
                             titleOutsideJustification:
                                 charts.OutsideJustification.middleDrawArea),
