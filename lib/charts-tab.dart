@@ -3,20 +3,6 @@ import 'network_helper.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-//class ChartsTab extends StatefulWidget {
-//  List<IndiaCovidData> indiaDataList;
-//  final Widget child;
-//  ChartsTab({Key key, this.indiaDataList,this.child}) : super(key: key);
-//  @override
-//  _ChartsTabState createState() => _ChartsTabState();
-//}
-//
-//class _ChartsTabState extends State<ChartsTab> {
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container();
-//  }
-//}
 
 class ChartsTab extends StatefulWidget {
   List<IndiaCovidData> indiaDataList;
@@ -29,6 +15,7 @@ class ChartsTab extends StatefulWidget {
 }
 
 class _ChartsTabState extends State<ChartsTab> {
+  List<IndiaCovidData> indiaDataList;
   List<charts.Series<Pollution, String>> _seriesData;
   List<charts.Series<Task, String>> _seriesPieData;
   List<charts.Series<Sales, int>> _seriesLineData;
@@ -75,6 +62,9 @@ class _ChartsTabState extends State<ChartsTab> {
       new Sales(4, 51),
       new Sales(5, 60),
     ];
+//Sales(days,deaths)
+//Sales(days,recovered)
+//Sales(days,totalCases)
 
     var linesalesdata2 = [
       new Sales(0, 20),
@@ -166,6 +156,7 @@ class _ChartsTabState extends State<ChartsTab> {
 
   @override
   void initState() {
+    indiaDataList=widget.indiaDataList;
     // TODO: implement initState
     super.initState();
     _seriesData = List<charts.Series<Pollution, String>>();
@@ -247,7 +238,7 @@ class _ChartsTabState extends State<ChartsTab> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Sales for the first 5 years',
+                  'Countrys Stats',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
                 Expanded(
