@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'network_helper.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/material.dart';
 
+import 'network_helper.dart';
 
 class ChartsTab extends StatefulWidget {
   List<IndiaCovidData> indiaDataList;
@@ -21,59 +20,52 @@ class _ChartsTabState extends State<ChartsTab> {
   List<charts.Series<Sales, int>> _seriesLineData;
 
   _generateData() {
+    int totaldays = widget.indiaDataList.length;
     var data1 = [
-      new Pollution(1980, 'USA', 30),
-      new Pollution(1980, 'Asia', 40),
-      new Pollution(1980, 'Europe', 10),
+      new Pollution(
+          'day b4 yesterday', widget.indiaDataList[totaldays - 3].todayCases),
+      new Pollution(
+          'yesterday', widget.indiaDataList[totaldays - 2].todayCases),
+      new Pollution('Today', widget.indiaDataList[totaldays - 1].todayCases),
     ];
     var data2 = [
-      new Pollution(1985, 'USA', 100),
-      new Pollution(1980, 'Asia', 150),
-      new Pollution(1985, 'Europe', 80),
+      new Pollution(
+          'day b4 yesterday', widget.indiaDataList[totaldays - 3].todayDeaths),
+      new Pollution(
+          'yesterday', widget.indiaDataList[totaldays - 2].todayDeaths),
+      new Pollution('Today', widget.indiaDataList[totaldays - 1].todayDeaths),
     ];
     var data3 = [
-      new Pollution(1985, 'USA', 200),
-      new Pollution(1980, 'Asia', 300),
-      new Pollution(1985, 'Europe', 180),
+      new Pollution('day b4 yesterday', 0),
+      new Pollution('yesterday', 0),
+      new Pollution('Today', 0),
     ];
-
+    double totalCases = (widget.indiaDataList.last.cases).toDouble();
     var piedata = [
-      new Task('Work', 35.8, Color(0xff3366cc)),
-      new Task('Eat', 8.3, Color(0xff990099)),
-      new Task('Commute', 10.8, Color(0xff109618)),
-      new Task('TV', 15.6, Color(0xfffdbe19)),
-      new Task('Sleep', 19.2, Color(0xffff9900)),
-      new Task('Other', 10.3, Color(0xffdc3912)),
+      new Task('Total cases:${widget.indiaDataList.last.cases}',
+          widget.indiaDataList.last.cases.toDouble(), Color(0xff3366cc)),
+      new Task('Deaths:${widget.indiaDataList.last.deaths}',
+          widget.indiaDataList.last.deaths.toDouble(), Color(0xff990099)),
+      new Task('Recovered:${widget.indiaDataList.last.recovered}',
+          widget.indiaDataList.last.recovered.toDouble(), Color(0xff109618)),
     ];
 
-    var linesalesdata = [
-      new Sales(0, 45),
-      new Sales(1, 56),
-      new Sales(2, 55),
-      new Sales(3, 60),
-      new Sales(4, 61),
-      new Sales(5, 70),
-    ];
-    var linesalesdata1 = [
-      new Sales(0, 35),
-      new Sales(1, 46),
-      new Sales(2, 45),
-      new Sales(3, 50),
-      new Sales(4, 51),
-      new Sales(5, 60),
-    ];
-//Sales(days,deaths)
-//Sales(days,recovered)
-//Sales(days,totalCases)
+    var linesalesdata2 = widget.indiaDataList.asMap().entries.map((entry) {
+      int idx = entry.key;
+      IndiaCovidData val = entry.value;
+      return Sales(idx, val.cases);
+    }).toList();
+    var linesalesdata = widget.indiaDataList.asMap().entries.map((entry) {
+      int idx = entry.key;
+      IndiaCovidData val = entry.value;
+      return Sales(idx, val.deaths);
+    }).toList();
 
-    var linesalesdata2 = [
-      new Sales(0, 20),
-      new Sales(1, 24),
-      new Sales(2, 25),
-      new Sales(3, 40),
-      new Sales(4, 45),
-      new Sales(5, 60),
-    ];
+    var linesalesdata1 = widget.indiaDataList.asMap().entries.map((entry) {
+      int idx = entry.key;
+      IndiaCovidData val = entry.value;
+      return Sales(idx, val.recovered);
+    }).toList();
 
     _seriesData.add(
       charts.Series(
@@ -113,11 +105,12 @@ class _ChartsTabState extends State<ChartsTab> {
 
     _seriesPieData.add(
       charts.Series(
+        displayName: "Display Name",
         domainFn: (Task task, _) => task.task,
         measureFn: (Task task, _) => task.taskvalue,
         colorFn: (Task task, _) =>
             charts.ColorUtil.fromDartColor(task.colorval),
-        id: 'Air Pollution',
+        id: 'Total Data Pie Chart',
         data: piedata,
         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
       ),
@@ -156,7 +149,7 @@ class _ChartsTabState extends State<ChartsTab> {
 
   @override
   void initState() {
-    indiaDataList=widget.indiaDataList;
+    indiaDataList = widget.indiaDataList;
     // TODO: implement initState
     super.initState();
     _seriesData = List<charts.Series<Pollution, String>>();
@@ -171,7 +164,45 @@ class _ChartsTabState extends State<ChartsTab> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'SO₂ emissions, by world region (in million tonnes)',
+                  'Countrys Stats',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: charts.LineChart(_seriesLineData,
+                      defaultRenderer: new charts.LineRendererConfig(
+                          includeArea: true, stacked: true),
+                      animate: true,
+                      animationDuration: Duration(seconds: 2),
+                      behaviors: [
+                        new charts.ChartTitle('days from 1st case',
+                            behaviorPosition: charts.BehaviorPosition.bottom,
+                            titleOutsideJustification:
+                                charts.OutsideJustification.middleDrawArea),
+                        new charts.ChartTitle('people (in thousands)',
+                            behaviorPosition: charts.BehaviorPosition.start,
+                            titleOutsideJustification:
+                                charts.OutsideJustification.middleDrawArea),
+                        new charts.ChartTitle(
+                          'Deaths, Recovered, Infected',
+                          behaviorPosition: charts.BehaviorPosition.end,
+                          titleOutsideJustification:
+                              charts.OutsideJustification.middleDrawArea,
+                        )
+                      ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Container(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Last 3 days Stats',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
                 Expanded(
@@ -195,7 +226,7 @@ class _ChartsTabState extends State<ChartsTab> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Time spent on daily tasks',
+                  'Total Data Pie Chart',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -231,44 +262,6 @@ class _ChartsTabState extends State<ChartsTab> {
           ),
         ),
       ),
-      Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Container(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Countrys Stats',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: charts.LineChart(_seriesLineData,
-                      defaultRenderer: new charts.LineRendererConfig(
-                          includeArea: true, stacked: true),
-                      animate: true,
-                      animationDuration: Duration(seconds: 5),
-                      behaviors: [
-                        new charts.ChartTitle('Years',
-                            behaviorPosition: charts.BehaviorPosition.bottom,
-                            titleOutsideJustification:
-                                charts.OutsideJustification.middleDrawArea),
-                        new charts.ChartTitle('Sales',
-                            behaviorPosition: charts.BehaviorPosition.start,
-                            titleOutsideJustification:
-                                charts.OutsideJustification.middleDrawArea),
-                        new charts.ChartTitle(
-                          'Departments',
-                          behaviorPosition: charts.BehaviorPosition.end,
-                          titleOutsideJustification:
-                              charts.OutsideJustification.middleDrawArea,
-                        )
-                      ]),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     ];
   }
 
@@ -284,10 +277,8 @@ class _ChartsTabState extends State<ChartsTab> {
 
 class Pollution {
   String place;
-  int year;
   int quantity;
-
-  Pollution(this.year, this.place, this.quantity);
+  Pollution(this.place, this.quantity);
 }
 
 class Task {
