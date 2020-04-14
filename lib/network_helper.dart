@@ -15,7 +15,6 @@ void main() async {
   print(nHelper.allObjectsList.last.recovered);
   print(nHelper.allObjectsList.last.active);
   print(nHelper.allObjectsList.last.critical);
-  print(nHelper.allObjectsList.last.day);
 }
 
 class NetworkHelper {
@@ -72,12 +71,12 @@ class NetworkHelper {
           recovered: element['recovered'],
           todayCases: element['todayCases'],
           todayDeaths: element['todayDeaths'],
-          origTimeStamp: DateTime.parse(element['timestamp']),
+          localTime: DateTime.parse(element['timestamp']),
         ));
       } else if (DateTime.parse(mapsList[i]['timestamp']).toLocal().day !=
           DateTime.parse(mapsList[i + 1]['timestamp']).toLocal().day) {
         print(
-            "adding data for day;${DateTime.parse(mapsList[i]['timestamp']).toLocal().day}");
+            "adding data for day;${DateTime.parse(element['timestamp']).toLocal().day}");
         res.add(CovidData(
           active: element['active'],
           cases: element['cases'],
@@ -86,7 +85,7 @@ class NetworkHelper {
           recovered: element['recovered'],
           todayCases: element['todayCases'],
           todayDeaths: element['todayDeaths'],
-          origTimeStamp: DateTime.parse(element['timestamp']),
+          localTime: DateTime.parse(element['timestamp']),
         ));
       }
     }
@@ -104,10 +103,7 @@ class CovidData {
   int recovered;
   int active;
   int critical;
-  String day;
-  DateTime origTimeStamp;
   DateTime localTime;
-  String dayMonth;
 
   CovidData({
     int cases,
@@ -117,21 +113,16 @@ class CovidData {
     int recovered,
     int active,
     int critical,
-    String dayMonth,
-    DateTime origTimeStamp,
+    DateTime localTime,
   }) {
-    this.origTimeStamp = origTimeStamp;
     this.todayCases = todayCases;
     this.critical = critical;
     this.todayDeaths = todayDeaths;
-    this.day =
-        "${origTimeStamp.toLocal().day}/${origTimeStamp.toLocal().month}/${origTimeStamp.toLocal().year}";
+
     this.active = active;
     this.cases = cases;
     this.deaths = deaths;
     this.recovered = recovered;
-    this.localTime = origTimeStamp.toLocal();
-    this.dayMonth =
-        "${origTimeStamp.toLocal().day}/${origTimeStamp.toLocal().month}";
+    this.localTime = localTime;
   }
 }
