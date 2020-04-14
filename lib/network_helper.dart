@@ -71,7 +71,8 @@ class NetworkHelper {
           recovered: element['recovered'],
           todayCases: element['todayCases'],
           todayDeaths: element['todayDeaths'],
-          localTime: DateTime.parse(element['timestamp']),
+          ddmm:
+              "${DateTime.parse(element['timestamp']).day}/${DateTime.parse(element['timestamp']).month}",
         ));
       } else if (DateTime.parse(mapsList[i]['timestamp']).toLocal().day !=
           DateTime.parse(mapsList[i + 1]['timestamp']).toLocal().day) {
@@ -85,7 +86,8 @@ class NetworkHelper {
           recovered: element['recovered'],
           todayCases: element['todayCases'],
           todayDeaths: element['todayDeaths'],
-          localTime: DateTime.parse(element['timestamp']),
+          ddmm:
+              "${DateTime.parse(element['timestamp']).day}/${DateTime.parse(element['timestamp']).month}",
         ));
       }
     }
@@ -103,7 +105,7 @@ class CovidData {
   int recovered;
   int active;
   int critical;
-  DateTime localTime;
+  String ddmm;
 
   CovidData({
     int cases,
@@ -113,7 +115,7 @@ class CovidData {
     int recovered,
     int active,
     int critical,
-    DateTime localTime,
+    String ddmm,
   }) {
     this.todayCases = todayCases;
     this.critical = critical;
@@ -123,6 +125,6 @@ class CovidData {
     this.cases = cases;
     this.deaths = deaths;
     this.recovered = recovered;
-    this.localTime = localTime;
+    this.ddmm = ddmm;
   }
 }

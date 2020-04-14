@@ -102,8 +102,7 @@ class _CountryDataState extends State<CountryData> {
                                               Color.fromARGB(120, 11, 126, 255),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(3))),
-                                      child: Text(
-                                          "${data.localTime.day}/${data.localTime.month}"),
+                                      child: Text(data.ddmm),
                                     ),
                                   ],
                                 ),

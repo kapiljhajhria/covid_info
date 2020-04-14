@@ -22,25 +22,19 @@ class _ChartsTabState extends State<ChartsTab> {
   _generateData() {
     int totalDays = widget.indiaDataList.length;
     var data1 = [
-      new BarChartClass(
-          "${widget.indiaDataList[totalDays - 4].localTime.day}/${widget.indiaDataList[totalDays - 4].localTime.month}",
+      new BarChartClass(widget.indiaDataList[totalDays - 4].ddmm,
           widget.indiaDataList[totalDays - 4].todayCases),
-      new BarChartClass(
-          "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
+      new BarChartClass(widget.indiaDataList[totalDays - 3].ddmm,
           widget.indiaDataList[totalDays - 3].todayCases),
-      new BarChartClass(
-          "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
+      new BarChartClass(widget.indiaDataList[totalDays - 2].ddmm,
           widget.indiaDataList[totalDays - 2].todayCases),
     ];
     var data2 = [
-      new BarChartClass(
-          "${widget.indiaDataList[totalDays - 4].localTime.day}/${widget.indiaDataList[totalDays - 4].localTime.month}",
+      new BarChartClass(widget.indiaDataList[totalDays - 4].ddmm,
           widget.indiaDataList[totalDays - 4].todayDeaths),
-      new BarChartClass(
-          "${widget.indiaDataList[totalDays - 3].localTime.day}/${widget.indiaDataList[totalDays - 3].localTime.month}",
+      new BarChartClass(widget.indiaDataList[totalDays - 3].ddmm,
           widget.indiaDataList[totalDays - 3].todayDeaths),
-      new BarChartClass(
-          "${widget.indiaDataList[totalDays - 2].localTime.day}/${widget.indiaDataList[totalDays - 2].localTime.month}",
+      new BarChartClass(widget.indiaDataList[totalDays - 2].ddmm,
           widget.indiaDataList[totalDays - 2].todayDeaths),
     ];
 
