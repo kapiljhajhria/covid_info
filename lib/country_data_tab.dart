@@ -60,7 +60,7 @@ class _CountryDataState extends State<CountryData> {
           itemBuilder: (BuildContext context, int index) {
             CovidData data = allObjectsList[index];
             return Container(
-              margin: EdgeInsets.fromLTRB(8, 5, 5, 8),
+              margin: EdgeInsets.fromLTRB(8, 5, 5, 0),
               child: Card(
                 borderOnForeground: true,
                 shadowColor: Colors.blue,
