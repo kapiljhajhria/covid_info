@@ -5,6 +5,7 @@ import 'package:covidinfo/state-data.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,8 +24,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     box = Hive.box('covidData');
     box.put('test01', 'this is hive test8');
-    nh.getListOfAllData(nh.src1IndiaDataUrl).then((value) {
-      nh.src1Map2ObjectsList(value);
+    nh.getListOfAllData(nh.src2IndiaDataUrl).then((value) {
+      nh.src2Map2CountryDataListWidHistory(value);
       _navigationTabsList = [
         CountryData(
           indiaDataList: nh.allObjectsList,
@@ -46,7 +47,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   checkFOrUpdates(BuildContext context) async {
-    bool updateAvailable = await nh.checkForUpdates();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    List versionList = packageInfo.version.split(".");
+    String version = versionList[0] + "." + versionList[1] + versionList[2];
+    String buildNumber = packageInfo.buildNumber;
+    String latestAvailableVersion = await nh.getLatestAppVersion();
+    print(
+        '${nh.versionMsg}  \n appName:$appName , packageName:$packageName , version:$version , latestVersion:$latestAvailableVersion buildNumber:$buildNumber');
+//    > double.parse(version)
+    bool updateAvailable =
+        double.parse(latestAvailableVersion) > double.parse(version);
     if (updateAvailable) {
       Flushbar(
         flushbarPosition: FlushbarPosition.BOTTOM,
@@ -88,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               fontFamily: "ShadowsIntoLightTwo"),
         ),
         messageText: Text(
-          "Verison ${nh.versionAvailable} is Available with more features or changes, Kindly download latest version of app to stay updated",
+          "Verison ${nh.latestAppVersion}  Available. \n ${nh.versionMsg}",
           style: TextStyle(
               fontSize: 18.0,
               color: Colors.green,
