@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     box = Hive.box('covidData');
     box.put('test01', 'this is hive test8');
-    nh.getListOfAllData().then((value) {
-      nh.convertMapListToObject(value);
+    nh.getListOfAllData(nh.src1Url).then((value) {
+      nh.src1Map2ObjectsList(value);
       _navigationTabsList = [
         CountryData(
           indiaDataList: nh.allObjectsList,
