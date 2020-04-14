@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'network_helper.dart';
 
 class ChartsTab extends StatefulWidget {
-  List<IndiaCovidData> indiaDataList;
+  List<CovidData> indiaDataList;
   final Widget child;
 
   ChartsTab({Key key, this.indiaDataList, this.child}) : super(key: key);
@@ -14,7 +14,7 @@ class ChartsTab extends StatefulWidget {
 }
 
 class _ChartsTabState extends State<ChartsTab> {
-  List<IndiaCovidData> indiaDataList;
+  List<CovidData> indiaDataList;
   List<charts.Series<BarChartClass, String>> _seriesData;
   List<charts.Series<PieChartClass, String>> _seriesPieData;
   List<charts.Series<TotalStatsClass, int>> _seriesLineData;
@@ -56,18 +56,18 @@ class _ChartsTabState extends State<ChartsTab> {
 
     var linesalesdata2 = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
-      IndiaCovidData val = entry.value;
+      CovidData val = entry.value;
       return TotalStatsClass(idx, val.cases);
     }).toList();
     var linesalesdata = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
-      IndiaCovidData val = entry.value;
+      CovidData val = entry.value;
       return TotalStatsClass(idx, val.deaths);
     }).toList();
 
     var linesalesdata1 = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
-      IndiaCovidData val = entry.value;
+      CovidData val = entry.value;
       return TotalStatsClass(idx, val.recovered);
     }).toList();
 

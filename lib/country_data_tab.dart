@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'network_helper.dart';
 
 class CountryData extends StatefulWidget {
-  List<IndiaCovidData> indiaDataList;
+  List<CovidData> indiaDataList;
 
   CountryData({Key key, this.indiaDataList}) : super(key: key);
   @override
@@ -13,7 +13,7 @@ class CountryData extends StatefulWidget {
 }
 
 class _CountryDataState extends State<CountryData> {
-  List<IndiaCovidData> allObjectsList = [];
+  List<CovidData> allObjectsList = [];
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _CountryDataState extends State<CountryData> {
           shrinkWrap: true,
           itemCount: allObjectsList.length,
           itemBuilder: (BuildContext context, int index) {
-            IndiaCovidData data = allObjectsList[index];
+            CovidData data = allObjectsList[index];
             return Container(
               margin: EdgeInsets.fromLTRB(8, 5, 5, 8),
               child: Card(

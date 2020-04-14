@@ -6,7 +6,8 @@ import 'package:package_info/package_info.dart';
 void main() async {
   NetworkHelper nHelper = NetworkHelper();
 
-  nHelper.src1Map2ObjectsList(await nHelper.getListOfAllData(nHelper.src1Url));
+  nHelper.src1Map2ObjectsList(
+      await nHelper.getListOfAllData(nHelper.src1IndiaDataUrl));
   print(nHelper.allObjectsList.last.cases);
   print(nHelper.allObjectsList.last.todayCases);
   print(nHelper.allObjectsList.last.deaths);
@@ -18,14 +19,14 @@ void main() async {
 }
 
 class NetworkHelper {
-  String src1Url = "http://covid19.soficoop.com/country/in";
-  String src2Url =
+  String src1IndiaDataUrl = "http://covid19.soficoop.com/country/in";
+  String src2IndiaDataUrl =
       "https://api.covid19india.org/data.jsonhttps://api.covid19india.org/data.json";
   String appUpdateUrl =
       "https://raw.githubusercontent.com/kapiljhajhria/covid_info/master/lib/updates-info.json";
   String appDownloadUrl =
       "https://drive.google.com/open?id=12TeFhUPxpIl1UR81ZbS8IW2MOs-CU2Im";
-  List<IndiaCovidData> allObjectsList = [];
+  List<CovidData> allObjectsList = [];
   String versionAvailable;
 
   Future<Map> getListOfAllData(String url) async {
@@ -58,12 +59,12 @@ class NetworkHelper {
 
   src1Map2ObjectsList(Map jsonMap) {
     List mapsList = jsonMap['snapshots'];
-    List<IndiaCovidData> res = [];
+    List<CovidData> res = [];
 
     for (int i = 0; i < mapsList.length; i++) {
       Map element = mapsList[i];
       if (i == mapsList.length - 1) {
-        res.add(IndiaCovidData(
+        res.add(CovidData(
           active: element['active'],
           cases: element['cases'],
           critical: element['critical'],
@@ -77,7 +78,7 @@ class NetworkHelper {
           DateTime.parse(mapsList[i + 1]['timestamp']).toLocal().day) {
         print(
             "adding data for day;${DateTime.parse(mapsList[i]['timestamp']).toLocal().day}");
-        res.add(IndiaCovidData(
+        res.add(CovidData(
           active: element['active'],
           cases: element['cases'],
           critical: element['critical'],
@@ -95,7 +96,7 @@ class NetworkHelper {
   }
 }
 
-class IndiaCovidData {
+class CovidData {
   int cases;
   int todayCases;
   int deaths;
@@ -108,7 +109,7 @@ class IndiaCovidData {
   DateTime localTime;
   String dayMonth;
 
-  IndiaCovidData({
+  CovidData({
     int cases,
     int todayCases,
     int deaths,
