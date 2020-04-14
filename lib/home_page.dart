@@ -2,9 +2,9 @@ import 'package:covidinfo/charts-tab.dart';
 import 'package:covidinfo/country_data_tab.dart';
 import 'package:covidinfo/network_helper.dart';
 import 'package:covidinfo/state-data.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         ),
         mainButton: FlatButton(
           onPressed: () {
-            launch(nh.updateFolderUrl);
+            launch(nh.appDownloadUrl);
           },
           child: Text(
             "Download",

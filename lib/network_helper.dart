@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart';
 import 'package:package_info/package_info.dart';
 
@@ -6,21 +7,21 @@ void main() async {
   NetworkHelper nHelper = NetworkHelper();
 
   nHelper.convertMapListToObject(await nHelper.getListOfAllData());
-  print(nHelper.allObjectsList.last.cases);
-  print(nHelper.allObjectsList.last.todayCases);
-  print(nHelper.allObjectsList.last.deaths);
-  print(nHelper.allObjectsList.last.todayDeaths);
-  print(nHelper.allObjectsList.last.recovered);
-  print(nHelper.allObjectsList.last.active);
-  print(nHelper.allObjectsList.last.critical);
-  print(nHelper.allObjectsList.last.day);
+//  print(nHelper.allObjectsList.last.cases);
+//  print(nHelper.allObjectsList.last.todayCases);
+//  print(nHelper.allObjectsList.last.deaths);
+//  print(nHelper.allObjectsList.last.todayDeaths);
+//  print(nHelper.allObjectsList.last.recovered);
+//  print(nHelper.allObjectsList.last.active);
+//  print(nHelper.allObjectsList.last.critical);
+//  print(nHelper.allObjectsList.last.day);
 }
 
 class NetworkHelper {
   String url = "http://covid19.soficoop.com/country/in";
-  String updateUrl =
+  String appUpdateUrl =
       "https://raw.githubusercontent.com/kapiljhajhria/covid_info/master/lib/updates-info.json";
-  String updateFolderUrl =
+  String appDownloadUrl =
       "https://drive.google.com/open?id=12TeFhUPxpIl1UR81ZbS8IW2MOs-CU2Im";
   List<IndiaCovidData> allObjectsList = [];
   String versionAvailable;
@@ -35,21 +36,23 @@ class NetworkHelper {
   }
 
   Future<bool> checkForUpdates() async {
-    versionAvailable="";
+    versionAvailable = "";
     Client client = Client();
-    Response response = await client.get(updateUrl);
+    Response response = await client.get(appUpdateUrl);
     Map jsonMap = json.decode(response.body);
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appName = packageInfo.appName;
     String packageName = packageInfo.packageName;
     List versionList = packageInfo.version.split(".");
-    String version =versionList[0]+"."+versionList[1]+versionList[2];
+    String version = versionList[0] + "." + versionList[1] + versionList[2];
     String buildNumber = packageInfo.buildNumber;
+
     ///TODO: do the same for latest version as well
-    double latestVersion=jsonMap['version'];
-    versionAvailable=latestVersion.toString();
-    print('appName:$appName , packageName:$packageName , version:$version , latestVersion:$latestVersion buildNumber:$buildNumber');
-    return jsonMap['version']>double.parse(version);
+    double latestVersion = jsonMap['version'];
+    versionAvailable = latestVersion.toString();
+    print(
+        'appName:$appName , packageName:$packageName , version:$version , latestVersion:$latestVersion buildNumber:$buildNumber');
+    return jsonMap['version'] > double.parse(version);
   }
 
   convertMapListToObject(List mapsList) {
