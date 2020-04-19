@@ -51,21 +51,25 @@ class _ChartsTabState extends State<ChartsTab> {
           widget.latestCountryData.recovered.toDouble(), Color(0xff109618)),
     ];
 
-    var linesalesdata2 = widget.indiaDataList.asMap().entries.map((entry) {
+    var linesalesdata2 =
+        widget.indiaDataList.sublist(45).asMap().entries.map((entry) {
       int idx = entry.key;
       CovidCountryData val = entry.value;
-      return TotalStatsClass(idx, val.totalConfirmed);
+      return TotalStatsClass(
+          idx, (val.totalConfirmed - val.totalDeceased - val.totalRecovered));
     }).toList();
-    var linesalesdata = widget.indiaDataList.asMap().entries.map((entry) {
+    var linesalesdata =
+        widget.indiaDataList.sublist(45).asMap().entries.map((entry) {
       int idx = entry.key;
       CovidCountryData val = entry.value;
       return TotalStatsClass(idx, val.totalDeceased);
     }).toList();
 
-    var linesalesdata1 = widget.indiaDataList.asMap().entries.map((entry) {
+    var linesalesdata1 =
+        widget.indiaDataList.sublist(45).asMap().entries.map((entry) {
       int idx = entry.key;
       CovidCountryData val = entry.value;
-      return TotalStatsClass(idx, val.totalRecovered);
+      return TotalStatsClass(idx, val.totalRecovered - val.totalDeceased);
     }).toList();
 
     _seriesData.add(
