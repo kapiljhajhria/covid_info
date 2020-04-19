@@ -33,7 +33,10 @@ class _HomePageState extends State<HomePage> {
         StatesData(
           statesDataList: nh.statesDataList,
         ),
-        ChartsTab(indiaDataList: nh.countryDataHistoryList.reversed.toList())
+        ChartsTab(
+          indiaDataList: nh.countryDataHistoryList.reversed.toList(),
+          latestCountryData: nh.latestCountryData,
+        )
       ];
       setState(() {
         fetchedData = true;

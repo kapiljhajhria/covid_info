@@ -32,13 +32,12 @@ class _CountryDataState extends State<CountryData> {
   DraggableScrollableSheet _buildDraggableScrollableSheet() {
     return DraggableScrollableSheet(
       initialChildSize: 0.4,
-      minChildSize: 0.3,
+      minChildSize: 0.4,
       maxChildSize: 0.8,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
           decoration: BoxDecoration(
             color: Colors.blue,
-            // border: Border.all(color: Colors.blue, width: 2),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
@@ -431,16 +430,18 @@ class _CountryDataState extends State<CountryData> {
                                       ),
                                     ),
                                     Expanded(
-                                        child: Container(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              latestCountryData.confirmed
-                                                  .toString(),
-                                              style: TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )))
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          latestCountryData.confirmed
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
@@ -588,7 +589,7 @@ class _CountryDataState extends State<CountryData> {
                                     child: Container(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          latestCountryData.deltaConfirmed
+                                          latestCountryData.deltaDeaths
                                               .toString(),
                                           style: TextStyle(
                                             fontSize: 18,

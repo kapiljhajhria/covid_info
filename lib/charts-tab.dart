@@ -5,9 +5,11 @@ import 'network_helper.dart';
 
 class ChartsTab extends StatefulWidget {
   List<CovidCountryData> indiaDataList;
+  CovidStateData latestCountryData;
   final Widget child;
 
-  ChartsTab({Key key, this.indiaDataList, this.child}) : super(key: key);
+  ChartsTab({Key key, this.indiaDataList, this.child, this.latestCountryData})
+      : super(key: key);
 
   @override
   _ChartsTabState createState() => _ChartsTabState();
@@ -15,6 +17,7 @@ class ChartsTab extends StatefulWidget {
 
 class _ChartsTabState extends State<ChartsTab> {
   List<CovidCountryData> indiaDataList;
+  CovidStateData latestCountryData;
   List<charts.Series<BarChartClass, String>> _seriesData;
   List<charts.Series<PieChartClass, String>> _seriesPieData;
   List<charts.Series<TotalStatsClass, int>> _seriesLineData;
@@ -22,36 +25,30 @@ class _ChartsTabState extends State<ChartsTab> {
   _generateData() {
     int totalDays = widget.indiaDataList.length;
     var data1 = [
+      new BarChartClass(widget.indiaDataList[totalDays - 7].ddmm,
+          widget.indiaDataList[totalDays - 7].dailyConfirmed),
+      new BarChartClass(widget.indiaDataList[totalDays - 6].ddmm,
+          widget.indiaDataList[totalDays - 6].dailyConfirmed),
+      new BarChartClass(widget.indiaDataList[totalDays - 5].ddmm,
+          widget.indiaDataList[totalDays - 5].dailyConfirmed),
       new BarChartClass(widget.indiaDataList[totalDays - 4].ddmm,
           widget.indiaDataList[totalDays - 4].dailyConfirmed),
       new BarChartClass(widget.indiaDataList[totalDays - 3].ddmm,
           widget.indiaDataList[totalDays - 3].dailyConfirmed),
       new BarChartClass(widget.indiaDataList[totalDays - 2].ddmm,
           widget.indiaDataList[totalDays - 2].dailyConfirmed),
-    ];
-    var data2 = [
-      new BarChartClass(widget.indiaDataList[totalDays - 4].ddmm,
-          widget.indiaDataList[totalDays - 4].dailyDeceased),
-      new BarChartClass(widget.indiaDataList[totalDays - 3].ddmm,
-          widget.indiaDataList[totalDays - 3].dailyDeceased),
-      new BarChartClass(widget.indiaDataList[totalDays - 2].ddmm,
-          widget.indiaDataList[totalDays - 2].dailyDeceased),
+      new BarChartClass(widget.indiaDataList[totalDays - 1].ddmm,
+          widget.indiaDataList[totalDays - 1].dailyConfirmed),
     ];
 
     double totalCases = (widget.indiaDataList.last.totalConfirmed).toDouble();
     var piedata = [
-      new PieChartClass(
-          'Total cases:${widget.indiaDataList.last.totalConfirmed}',
-          widget.indiaDataList.last.totalConfirmed.toDouble(),
-          Color(0xff3366cc)),
-      new PieChartClass(
-          'Deaths:${widget.indiaDataList.last.totalDeceased}',
-          widget.indiaDataList.last.totalDeceased.toDouble(),
-          Color(0xff990099)),
-      new PieChartClass(
-          'Recovered:${widget.indiaDataList.last.totalRecovered}',
-          widget.indiaDataList.last.totalRecovered.toDouble(),
-          Color(0xff109618)),
+      new PieChartClass('Total cases:${widget.latestCountryData.confirmed}',
+          widget.latestCountryData.confirmed.toDouble(), Color(0xff3366cc)),
+      new PieChartClass('Deaths:${widget.latestCountryData.deaths}',
+          widget.latestCountryData.deaths.toDouble(), Color(0xff990099)),
+      new PieChartClass('Recovered:${widget.latestCountryData.recovered}',
+          widget.latestCountryData.recovered.toDouble(), Color(0xff109618)),
     ];
 
     var linesalesdata2 = widget.indiaDataList.asMap().entries.map((entry) {
@@ -80,17 +77,6 @@ class _ChartsTabState extends State<ChartsTab> {
         fillPatternFn: (_, __) => charts.FillPatternType.solid,
         fillColorFn: (BarChartClass pollution, _) =>
             charts.ColorUtil.fromDartColor(Color(0xff990099)),
-      ),
-    );
-
-    _seriesData.add(
-      charts.Series(
-        domainFn: (BarChartClass pollution, _) => pollution.dateMonth,
-        measureFn: (BarChartClass pollution, _) => pollution.numberOfPeopel,
-        data: data2,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (BarChartClass pollution, _) =>
-            charts.ColorUtil.fromDartColor(Color(0xff109618)),
       ),
     );
 
@@ -136,6 +122,7 @@ class _ChartsTabState extends State<ChartsTab> {
   @override
   void initState() {
     indiaDataList = widget.indiaDataList;
+    latestCountryData = widget.latestCountryData;
     super.initState();
     _seriesData = List<charts.Series<BarChartClass, String>>();
     _seriesPieData = List<charts.Series<PieChartClass, String>>();
@@ -187,7 +174,7 @@ class _ChartsTabState extends State<ChartsTab> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Last 3 days Stats',
+                  'Last 7 days Confirmed cases',
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
                 Expanded(
