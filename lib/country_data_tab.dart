@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'network_helper.dart';
 
 class CountryData extends StatefulWidget {
-  List<CovidData> indiaDataList;
+  List<CovidCountryData> indiaDataList;
 
   CountryData({Key key, this.indiaDataList}) : super(key: key);
   @override
@@ -13,7 +13,7 @@ class CountryData extends StatefulWidget {
 }
 
 class _CountryDataState extends State<CountryData> {
-  List<CovidData> allObjectsList = [];
+  List<CovidCountryData> allObjectsList = [];
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _CountryDataState extends State<CountryData> {
           shrinkWrap: true,
           itemCount: allObjectsList.length,
           itemBuilder: (BuildContext context, int index) {
-            CovidData data = allObjectsList[index];
+            CovidCountryData data = allObjectsList[index];
             return Container(
               margin: EdgeInsets.fromLTRB(8, 5, 5, 0),
               child: Card(
@@ -147,7 +147,8 @@ class _CountryDataState extends State<CountryData> {
                                             child: Container(
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  data.cases.toString(),
+                                                  data.totalConfirmed
+                                                      .toString(),
                                                   style: TextStyle(
                                                     fontSize: 22,
                                                     fontWeight: FontWeight.bold,
@@ -187,7 +188,8 @@ class _CountryDataState extends State<CountryData> {
                                             child: Container(
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  data.recovered.toString(),
+                                                  data.totalRecovered
+                                                      .toString(),
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                   ),
@@ -221,7 +223,7 @@ class _CountryDataState extends State<CountryData> {
                                             child: Container(
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  data.deaths.toString(),
+                                                  data.totalDeceased.toString(),
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                   ),
@@ -265,7 +267,7 @@ class _CountryDataState extends State<CountryData> {
                                         child: Container(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              data.todayCases.toString(),
+                                              data.dailyConfirmed.toString(),
                                               style: TextStyle(
                                                 fontSize: 18,
                                               ),
@@ -299,7 +301,7 @@ class _CountryDataState extends State<CountryData> {
                                         child: Container(
                                             alignment: Alignment.center,
                                             child: Text(
-                                              data.todayDeaths.toString(),
+                                              data.dailyDeceased.toString(),
                                               style: TextStyle(
                                                 fontSize: 18,
                                               ),

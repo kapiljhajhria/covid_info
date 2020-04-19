@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'network_helper.dart';
 
 class ChartsTab extends StatefulWidget {
-  List<CovidData> indiaDataList;
+  List<CovidCountryData> indiaDataList;
   final Widget child;
 
   ChartsTab({Key key, this.indiaDataList, this.child}) : super(key: key);
@@ -14,7 +14,7 @@ class ChartsTab extends StatefulWidget {
 }
 
 class _ChartsTabState extends State<ChartsTab> {
-  List<CovidData> indiaDataList;
+  List<CovidCountryData> indiaDataList;
   List<charts.Series<BarChartClass, String>> _seriesData;
   List<charts.Series<PieChartClass, String>> _seriesPieData;
   List<charts.Series<TotalStatsClass, int>> _seriesLineData;
@@ -23,46 +23,52 @@ class _ChartsTabState extends State<ChartsTab> {
     int totalDays = widget.indiaDataList.length;
     var data1 = [
       new BarChartClass(widget.indiaDataList[totalDays - 4].ddmm,
-          widget.indiaDataList[totalDays - 4].todayCases),
+          widget.indiaDataList[totalDays - 4].dailyConfirmed),
       new BarChartClass(widget.indiaDataList[totalDays - 3].ddmm,
-          widget.indiaDataList[totalDays - 3].todayCases),
+          widget.indiaDataList[totalDays - 3].dailyConfirmed),
       new BarChartClass(widget.indiaDataList[totalDays - 2].ddmm,
-          widget.indiaDataList[totalDays - 2].todayCases),
+          widget.indiaDataList[totalDays - 2].dailyConfirmed),
     ];
     var data2 = [
       new BarChartClass(widget.indiaDataList[totalDays - 4].ddmm,
-          widget.indiaDataList[totalDays - 4].todayDeaths),
+          widget.indiaDataList[totalDays - 4].dailyDeceased),
       new BarChartClass(widget.indiaDataList[totalDays - 3].ddmm,
-          widget.indiaDataList[totalDays - 3].todayDeaths),
+          widget.indiaDataList[totalDays - 3].dailyDeceased),
       new BarChartClass(widget.indiaDataList[totalDays - 2].ddmm,
-          widget.indiaDataList[totalDays - 2].todayDeaths),
+          widget.indiaDataList[totalDays - 2].dailyDeceased),
     ];
 
-    double totalCases = (widget.indiaDataList.last.cases).toDouble();
+    double totalCases = (widget.indiaDataList.last.totalConfirmed).toDouble();
     var piedata = [
-      new PieChartClass('Total cases:${widget.indiaDataList.last.cases}',
-          widget.indiaDataList.last.cases.toDouble(), Color(0xff3366cc)),
-      new PieChartClass('Deaths:${widget.indiaDataList.last.deaths}',
-          widget.indiaDataList.last.deaths.toDouble(), Color(0xff990099)),
-      new PieChartClass('Recovered:${widget.indiaDataList.last.recovered}',
-          widget.indiaDataList.last.recovered.toDouble(), Color(0xff109618)),
+      new PieChartClass(
+          'Total cases:${widget.indiaDataList.last.totalConfirmed}',
+          widget.indiaDataList.last.totalConfirmed.toDouble(),
+          Color(0xff3366cc)),
+      new PieChartClass(
+          'Deaths:${widget.indiaDataList.last.totalDeceased}',
+          widget.indiaDataList.last.totalDeceased.toDouble(),
+          Color(0xff990099)),
+      new PieChartClass(
+          'Recovered:${widget.indiaDataList.last.totalRecovered}',
+          widget.indiaDataList.last.totalRecovered.toDouble(),
+          Color(0xff109618)),
     ];
 
     var linesalesdata2 = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
-      CovidData val = entry.value;
-      return TotalStatsClass(idx, val.cases);
+      CovidCountryData val = entry.value;
+      return TotalStatsClass(idx, val.totalConfirmed);
     }).toList();
     var linesalesdata = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
-      CovidData val = entry.value;
-      return TotalStatsClass(idx, val.deaths);
+      CovidCountryData val = entry.value;
+      return TotalStatsClass(idx, val.totalDeceased);
     }).toList();
 
     var linesalesdata1 = widget.indiaDataList.asMap().entries.map((entry) {
       int idx = entry.key;
-      CovidData val = entry.value;
-      return TotalStatsClass(idx, val.recovered);
+      CovidCountryData val = entry.value;
+      return TotalStatsClass(idx, val.totalRecovered);
     }).toList();
 
     _seriesData.add(
