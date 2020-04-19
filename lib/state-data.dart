@@ -56,13 +56,31 @@ class _StatesDataState extends State<StatesData> {
                         ),
                         child: Column(
                           children: <Widget>[
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  data.state,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Serif'),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.calendar_today,
+                                      Icons.access_time,
                                       color: Color.fromARGB(120, 11, 126, 255),
                                     ),
                                     Container(
