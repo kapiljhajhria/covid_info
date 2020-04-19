@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
       _navigationTabsList = [
         CountryData(
           indiaDataList: nh.countryDataHistoryList,
+          latestCountryData: nh.latestCountryData,
         ),
         StatesData(
           statesDataList: nh.statesDataList,
@@ -87,31 +88,31 @@ class _HomePageState extends State<HomePage> {
             length: 3,
             initialIndex: 0,
             child: Scaffold(
-              appBar: AppBar(
-                title: Text('Covid'),
-                actions: <Widget>[
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          elevation: 4.0,
-                          content: Text(
-                              "Verison ${nh.latestAppVersion}  Available. \n${nh.versionMsg}"),
-                          duration: Duration(seconds: 3),
-                          action: SnackBarAction(
-                            label: "Download",
-                            onPressed: () {
-                              launch(nh.appDownloadUrl);
-                            },
-                          ),
-                        ));
-                      },
-                    ),
-                  )
-                ],
-              ),
+//              appBar: AppBar(
+//                title: Text('Covid'),
+//                actions: <Widget>[
+//                  Builder(
+//                    builder: (context) => IconButton(
+//                      icon: Icon(Icons.refresh),
+//                      onPressed: () {
+//                        Scaffold.of(context).showSnackBar(SnackBar(
+//                          behavior: SnackBarBehavior.floating,
+//                          elevation: 4.0,
+//                          content: Text(
+//                              "Verison ${nh.latestAppVersion}  Available. \n${nh.versionMsg}"),
+//                          duration: Duration(seconds: 3),
+//                          action: SnackBarAction(
+//                            label: "Download",
+//                            onPressed: () {
+//                              launch(nh.appDownloadUrl);
+//                            },
+//                          ),
+//                        ));
+//                      },
+//                    ),
+//                  )
+//                ],
+//              ),
               bottomNavigationBar: TabBar(
                 tabs: <Widget>[
                   Tab(
