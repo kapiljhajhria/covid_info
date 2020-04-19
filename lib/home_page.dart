@@ -2,7 +2,6 @@ import 'package:covidinfo/charts-tab.dart';
 import 'package:covidinfo/country_data_tab.dart';
 import 'package:covidinfo/network_helper.dart';
 import 'package:covidinfo/state-data.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:package_info/package_info.dart';
@@ -60,69 +59,54 @@ class _HomePageState extends State<HomePage> {
     bool updateAvailable =
         double.parse(latestAvailableVersion) > double.parse(version);
     if (updateAvailable) {
-      Flushbar(
-        flushbarPosition: FlushbarPosition.BOTTOM,
-        flushbarStyle: FlushbarStyle.FLOATING,
-        reverseAnimationCurve: Curves.decelerate,
-        forwardAnimationCurve: Curves.elasticOut,
-        backgroundColor: Colors.red,
-        boxShadows: [
-          BoxShadow(
-              color: Colors.blue[800],
-              offset: Offset(0.0, 2.0),
-              blurRadius: 3.0)
-        ],
-        backgroundGradient:
-            LinearGradient(colors: [Colors.blueGrey, Colors.black]),
-        isDismissible: false,
-        duration: Duration(seconds: 4),
-        icon: Icon(
-          Icons.update,
-          color: Colors.greenAccent,
-        ),
-        mainButton: FlatButton(
+      Scaffold.of(context).showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        elevation: 14.0,
+        content: Text(
+            "Verison ${nh.latestAppVersion}  Available. \n${nh.versionMsg}"),
+        duration: Duration(seconds: 5),
+        action: SnackBarAction(
+          label: "Download",
           onPressed: () {
             launch(nh.appDownloadUrl);
           },
-          child: Text(
-            "Download",
-            style: TextStyle(color: Colors.amber),
-          ),
         ),
-        showProgressIndicator: true,
-        progressIndicatorBackgroundColor: Colors.blueGrey,
-        titleText: Text(
-          "Update Available",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              color: Colors.yellow[600],
-              fontFamily: "ShadowsIntoLightTwo"),
-        ),
-        messageText: Text(
-          "Verison ${nh.latestAppVersion}  Available. \n ${nh.versionMsg}",
-          style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.green,
-              fontFamily: "ShadowsIntoLightTwo"),
-        ),
-      )..show(context);
+      ));
     }
   }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return fetchedData
         ? DefaultTabController(
+            key: _scaffoldKey,
             length: 3,
             initialIndex: 0,
             child: Scaffold(
               appBar: AppBar(
                 title: Text('Covid'),
                 actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: () {},
+                  Builder(
+                    builder: (context) => IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          behavior: SnackBarBehavior.floating,
+                          elevation: 4.0,
+                          content: Text(
+                              "Verison ${nh.latestAppVersion}  Available. \n${nh.versionMsg}"),
+                          duration: Duration(seconds: 3),
+                          action: SnackBarAction(
+                            label: "Download",
+                            onPressed: () {
+                              launch(nh.appDownloadUrl);
+                            },
+                          ),
+                        ));
+                      },
+                    ),
                   )
                 ],
               ),

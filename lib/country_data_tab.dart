@@ -63,7 +63,6 @@ class _CountryDataState extends State<CountryData> {
               margin: EdgeInsets.fromLTRB(8, 5, 5, 0),
               child: Card(
                 borderOnForeground: true,
-                shadowColor: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),

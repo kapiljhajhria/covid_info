@@ -1,11 +1,9 @@
 import 'package:covidinfo/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main()async{
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final appDocDir = await getApplicationDocumentsDirectory();
@@ -21,11 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Covid Data - India',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: Scaffold(body: HomePage()),
     );
   }
 }
-
