@@ -27,10 +27,12 @@ class _HomePageState extends State<HomePage> {
       nh.src2Map2CountryDataListWidHistory(value);
       _navigationTabsList = [
         CountryData(
-          indiaDataList: nh.indiaDataHistoryList,
+          indiaDataList: nh.countryDataHistoryList,
         ),
-        StatesData(),
-        ChartsTab(indiaDataList: nh.indiaDataHistoryList.reversed.toList())
+        StatesData(
+          statesDataList: nh.statesDataList,
+        ),
+        ChartsTab(indiaDataList: nh.countryDataHistoryList.reversed.toList())
       ];
       setState(() {
         fetchedData = true;

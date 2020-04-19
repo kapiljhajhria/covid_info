@@ -24,28 +24,6 @@ class _CountryDataState extends State<CountryData> {
     super.initState();
   }
 
-  Widget cardsRow(String label, String data) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Container(
-          child: Text(
-            label,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          alignment: Alignment.centerLeft,
-        ),
-        Container(
-          child: Text(
-            data,
-            style: TextStyle(fontSize: 18),
-          ),
-          alignment: Alignment.center,
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(

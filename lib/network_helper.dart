@@ -22,8 +22,9 @@ class NetworkHelper {
       "https://raw.githubusercontent.com/kapiljhajhria/public-jsons/master/covid-update.json";
   String appDownloadUrl =
       "https://drive.google.com/open?id=12TeFhUPxpIl1UR81ZbS8IW2MOs-CU2Im";
-  List<CovidCountryData> indiaDataHistoryList = [];
-  List<CovidCountryData> indianStatesDataList = [];
+  List<CovidCountryData> countryDataHistoryList = [];
+  List<CovidStateData> statesDataList = [];
+  CovidStateData latestCountryData;
   String latestAppVersion;
   String versionMsg;
 
@@ -31,6 +32,8 @@ class NetworkHelper {
     Client client = Client();
     Response response = await client.get(url);
     Map jsonMap = json.decode(response.body);
+//    countryDataHistoryList=jsonMap['cases_time_series'];
+//    statesDataList=jsonMap['statewise'];
     return jsonMap;
   }
 
@@ -45,12 +48,35 @@ class NetworkHelper {
   }
 
   src2Map2CountryDataListWidHistory(Map jsonMap) {
-    List mapsList = jsonMap['cases_time_series'];
-    List<CovidCountryData> res = [];
+    List countryDataList = jsonMap['cases_time_series'];
+    List statesDataList = jsonMap['statewise'];
+    List<CovidCountryData> resCountry = [];
+    List<CovidStateData> resStates = [];
 
-    for (int i = 0; i < mapsList.length; i++) {
-      Map element = mapsList[i];
-      res.add(CovidCountryData(
+    for (int i = 0; i < statesDataList.length; i++) {
+      Map item = statesDataList[i];
+      CovidStateData tempData = CovidStateData(
+        active: item['active'],
+        confirmed: item['confirmed'],
+        deaths: item['deaths'],
+        deltaConfirmed: item['deltaconfirmed'],
+        deltaDeaths: item['deltadeaths'],
+        deltaRecovered: item['deltarecovered'],
+        lastUpdatedTime: item['lastupdatedtime'],
+        recovered: item['recovered'],
+        state: item['state'],
+        stateCode: item['statecode'],
+        stateNotes: item['statnotes'],
+      );
+      if (i == 0)
+        latestCountryData = tempData;
+      else
+        resStates.add(tempData);
+    }
+
+    for (int i = 0; i < countryDataList.length; i++) {
+      Map element = countryDataList[i];
+      resCountry.add(CovidCountryData(
         totalConfirmed: element['totalconfirmed'],
         totalDeceased: element['totaldeceased'],
         totalRecovered: element['totalrecovered'],
@@ -61,7 +87,10 @@ class NetworkHelper {
       ));
     }
 
-    this.indiaDataHistoryList = List.from(res.reversed);
+    ///TODO: add latest data here at the state of country list
+    this.countryDataHistoryList = List.from(resCountry.reversed);
+    resStates.sort((a, b) => a.state.compareTo(b.state));
+    this.statesDataList = List.from(resStates);
   }
 }
 
