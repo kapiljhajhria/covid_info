@@ -13,17 +13,18 @@ class StatesData extends StatefulWidget {
 
 class _StatesDataState extends State<StatesData> {
   List<CovidStateData> statesDataList = [];
-  List<ExpansionTile> expansionList;
+  List<ExpansionTile> expansionList = [];
+  String sortBy = "";
 
   @override
   void initState() {
     statesDataList = widget.statesDataList;
-//    expansionList = widget.statesDataList
-//        .map((data) => ExpansionTile(
-//              title: Text(data.state),
-//              children: <Widget>[listBuilderItem(data)],
-//            ))
-//        .toList();
+    expansionList = widget.statesDataList
+        .map((data) => ExpansionTile(
+              title: Text(data.state),
+              children: <Widget>[listBuilderItem(data)],
+            ))
+        .toList();
     // TODO: implement initState
     super.initState();
   }
@@ -307,19 +308,91 @@ class _StatesDataState extends State<StatesData> {
         elevation: 10,
         title: Text("States Data"),
         centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton(
+            onSelected: (selected) {
+              sortBy = selected;
+              if (selected == "cases")
+                widget.statesDataList
+                    .sort((a, b) => b.confirmed.compareTo(a.confirmed));
+              if (selected == "name")
+                widget.statesDataList
+                    .sort((a, b) => a.state.compareTo(b.state));
+              if (selected == "confirmedToday")
+                widget.statesDataList.sort(
+                    (a, b) => b.deltaConfirmed.compareTo(a.deltaConfirmed));
+              if (selected == "deathToday")
+                widget.statesDataList
+                    .sort((a, b) => b.deltaDeaths.compareTo(a.deltaDeaths));
+              if (selected == "totalRecovered")
+                widget.statesDataList
+                    .sort((a, b) => b.recovered.compareTo(a.recovered));
+              if (selected == "totalDeaths")
+                widget.statesDataList
+                    .sort((a, b) => b.deaths.compareTo(a.deaths));
+
+              expansionList = widget.statesDataList
+                  .map((data) => ExpansionTile(
+                        title: Text(data.state),
+                        children: <Widget>[listBuilderItem(data)],
+                      ))
+                  .toList();
+              setState(() {});
+            },
+            child: Icon(Icons.sort),
+            itemBuilder: (BuildContext context) {
+              return [
+                CheckedPopupMenuItem(
+                  value: "cases",
+                  child: Text("Cases"),
+                  checked: sortBy == "total cases",
+                ),
+                CheckedPopupMenuItem(
+                  checked: sortBy == "name",
+                  value: "name",
+                  child: Text("Name"),
+                ),
+                CheckedPopupMenuItem(
+                  checked: sortBy == "confirmedToday",
+                  value: "confirmedToday",
+                  child: Text("cases today"),
+                ),
+                CheckedPopupMenuItem(
+                  checked: sortBy == "deathToday",
+                  value: "deathToday",
+                  child: Text("death today"),
+                ),
+                CheckedPopupMenuItem(
+                  checked: sortBy == "totalRecovered",
+                  value: "totalRecovered",
+                  child: Text("Total Recovered"),
+                ),
+                CheckedPopupMenuItem(
+                  checked: sortBy == "totalDeaths",
+                  value: "totalDeaths",
+                  child: Text("Total Deaths"),
+                ),
+              ];
+            },
+          )
+        ],
       ),
-      body: Container(
-        alignment: Alignment.center,
-        width: double.infinity,
-        height: double.infinity,
-        child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: expansionList.length,
-            itemBuilder: (BuildContext context, int index) {
+      body: expansionList.isNotEmpty
+          ? Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: double.infinity,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: expansionList.length,
+                  itemBuilder: (BuildContext context, int index) {
 //              CovidStateData data = statesDataList[index];
-              return expansionList[index];
-            }),
-      ),
+                    return expansionList[index];
+                  }),
+            )
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }

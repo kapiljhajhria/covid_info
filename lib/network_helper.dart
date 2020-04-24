@@ -2,18 +2,17 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
-//void main() async {
-//  NetworkHelper nHelper = NetworkHelper();
-//
-//  nHelper.src2Map2CountryDataListWidHistory(
-//      await nHelper.getListOfAllData(nHelper.src2IndiaDataUrl));
-//  print(nHelper.allObjectsList.last.cases);
-//  print(nHelper.allObjectsList.last.todayCases);
-//  print(nHelper.allObjectsList.last.deaths);
-//  print(nHelper.allObjectsList.last.todayDeaths);
-//  print(nHelper.allObjectsList.last.recovered);
-//  nHelper.getLatestAppVersion();
-//}
+void main() async {
+  NetworkHelper nHelper = NetworkHelper();
+
+  nHelper.src2Map2CountryDataListWidHistory(
+      await nHelper.getListOfAllData(nHelper.src2IndiaDataUrl));
+  List casesList = [];
+
+  nHelper.countryDataHistoryList
+      .forEach((d) => casesList.add(d.totalConfirmed));
+  print(casesList.reversed.join(","));
+}
 
 class NetworkHelper {
   String src1IndiaDataUrl = "http://covid19.soficoop.com/country/in";
